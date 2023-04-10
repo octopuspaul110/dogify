@@ -89,7 +89,15 @@ def get_pred_score(pred_dog_breed,confidence_score):
           try:
             openai_learnmore_module(pred_dog_breed)
           except Exception as e:
-            st.write(f'click the following link to learn about _{pred_dog_breed}_ [link](https://en.wikipedia.org/wiki/{pred_dog_breed})')
+            if pred_dog_breed == 'pembroke':
+              pred_dog_breed = pred_dog_breed + '_welsh_corgi'
+            elif 'poodle' in pred_dog_breed:
+              pred_dog_breed = 'poodle'
+            elif 'chow' in pred_dog_breed:
+              pred_dog_breed = pred_dog_breed + '_' + pred_dog_breed
+            elif pre_dog_breed == 'japanese_spaniel':
+              pred_dog_breed = 'japanese-chin-history-japans-royal-spaniel'
+            st.write(f'click the following link to learn more about _{pred_dog_breed}_ [link](https://www.akc.org/dog-breeds/{pred_dog_breed.replace('_','-')})')
     else:
             st.write(f'oh,seems like you uploaded the wrong or bad image,reload the app and upload a clear dog image.')
 

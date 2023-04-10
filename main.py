@@ -13,9 +13,9 @@ def load_model(model_path):
   model = tf.keras.models.load_model(model_path,custom_objects = {'KerasLayer':tfhub.KerasLayer})
   print(f'Successfully loaded model saved to {model_path}')
   return model
-model_path = "C:/Users/ACER NITRO/Desktop/dogify/dog_app/dogify/models/20230330-12441680180287full-image-set-imagenetv3-Adam-lr-0.0002final.h5"
+model_path = "saved_model/20230330-12441680180287full-image-set-imagenetv3-Adam-lr-0.0002final.h5"
 model = load_model(model_path)
-my_dog_img_path = 'C:/Users/ACER NITRO/Desktop/dogify/dog_app/dogify/my_dog_images/'
+my_dog_img_path = 'dgify/my_dog_images/'
 my_dog_img_paths = [my_dog_img_path + name for name in os.listdir(my_dog_img_path)]
 img_size = 224
 batch_size = 32
@@ -59,7 +59,7 @@ def get_unique_breeds(path):
     labels = np.array(label_csv['breed'])
     unique_labels = np.unique(labels)
     return unique_labels
-labels_path = 'C:/Users/ACER NITRO/computer vision/computer vision udemy/dogify/labels.csv'
+labels_path = 'dogify/labels.csv'
 unique_labels = get_unique_breeds(labels_path)
 if __name__ == '__main__':
   my_dog_data = create_data_batches(my_dog_img_paths,test_data = True)
