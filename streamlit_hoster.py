@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 import openai
 import time
 import os
- 
+
+email_address = "octopuspaul110@gmail.com" 
 st.set_page_config(page_title='Dog Vision App')
 #Authentication of openai api
 load_dotenv()
@@ -31,7 +32,7 @@ def get_unique_breeds(path):
     return unique_labels
 
 
-model_path = "saved_model/20230330-12441680180287full-image-set-imagenetv3-Adam-lr-0.0002final.h5"
+model_path = 'saved_model/20230330-12441680180287full-image-set-imagenetv3-Adam-lr-0.0002final.h5'
 model = load_model(model_path)
 labels_path = 'labels/labels.csv'
 dog_breeds = get_unique_breeds(labels_path)
@@ -44,8 +45,7 @@ step1 : Take a picture of your dog and select the picture from your folder by cl
 step2: click the GET BREED button to get your dog breed\n
 step3: click the link below the prediction to learn more about the dog breed if you see one\n
 ###### *Note:*
-The model cannot detect the absence of a dog in an image,\n
-Upload dog images only.
+The model cannot detect the absence of a dog in an image,Upload dog images only.
 """)
 #sidebar
 def get_time():
@@ -59,7 +59,7 @@ def get_time():
   else: return None
   return hour
 with st.sidebar.title('About App') as title:
-  st.write(f'Hello there,Good {get_time()},this is a computer vision project that helps you get the breed and learn a few things about your dog,this project adopts the transfer learning approach in machine learning using the inceptionv3 model developed at google with 24 million Parameters,6 Billion FLOPs and trained on imagenet(more on imagenet on https://paperswithcode.com/dataset/imagenet ).\nyou can learn about the model by reading its paper on https://www.bing.com/ck/a?!&&p=883ef823742cb051JmltdHM9MTY4MDczOTIwMCZpZ3VpZD0xNzE3N2Y5NC1iOTk1LTZhNGMtMDgwNy02ZWFmYjhkODZiNDMmaW5zaWQ9NTM3Mg&ptn=3&hsh=3&fclid=17177f94-b995-6a4c-0807-6eafb8d86b43&psq=inceptionv3+paper&u=a1aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzE1MTIuMDA1NjcucGRm&ntb=1. Thanks...')
+  st.write(f'Hello there,Good {get_time()},this is a computer vision project that helps you get the breed and learn a few things about your dog,this project adopts the transfer learning approach in machine learning using the inceptionv3 model developed at google with 24 million Parameters,6 Billion FLOPs and trained on imagenet(more on imagenet on https://paperswithcode.com/dataset/imagenet ).\nyou can learn about the model by reading its paper on https://www.bing.com/ck/a?!&&p=883ef823742cb051JmltdHM9MTY4MDczOTIwMCZpZ3VpZD0xNzE3N2Y5NC1iOTk1LTZhNGMtMDgwNy02ZWFmYjhkODZiNDMmaW5zaWQ9NTM3Mg&ptn=3&hsh=3&fclid=17177f94-b995-6a4c-0807-6eafb8d86b43&psq=inceptionv3+paper&u=a1aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzE1MTIuMDA1NjcucGRm&ntb=1. Contact me at {email_address},Thanks...')
 
 @st.cache_data
 def predict(image_file):
@@ -72,15 +72,20 @@ def predict(image_file):
         pred_dog_breed = dog_breeds[np.argmax(prediction)]
         confidence_score = round(np.max(prediction) * 100)
         #scorer = f"I'm {confidence_score}% sure your dog is a {pred_dog_breed}"
-        gen_pred_button = st.button("GET BREED")
-        if gen_pred_button:
-              st.title(f'Predicted breed for this dog is :blue[{pred_dog_breed}] :dog:')
-              st.title(f'Confidence Score: {confidence_score}%')
-              #st.write(f'click the botton below to learn more about your dog')
-              try:
-                openai_learnmore_module(pred_dog_breed)
-              except Exception as e:
-                st.write(f'click the following link to learn about _{pred_dog_breed}_ [link](https://en.wikipedia.org/wiki/{pred_dog_breed})')
+        return pred_dog_breed,confidence_score
+
+def get_pred_score(pred_dog_breed,confidence_score):
+    gen_pred_button = st.button("GET BREED")
+    if gen_pred_button:
+        st.title(f'Predicted breed for this dog is :blue[{pred_dog_breed}] :dog:')
+        st.title(f'Confidence Score: {confidence_score}%')
+        #st.write(f'click the botton below to learn more about your dog')
+        try:
+          openai_learnmore_module(pred_dog_breed)
+        except Exception as e:
+          st.write(f'click the following link to learn about _{pred_dog_breed}_ [link](https://en.wikipedia.org/wiki/{pred_dog_breed})')
+        finally:
+           st.write(f'App Developer can be reached at [link](octopuspaul110@gmail.com)')
 
 def openai_learnmore_module(pred_dog_breed):
     prompt = f"Tell me everything you know about {pred_dog_breed} dog breed in 20 words"
@@ -102,7 +107,8 @@ def openai_learnmore_module(pred_dog_breed):
 def mainer(image_file):
         st.image(image_file,caption='Your dog image',channels = 'RGB')
         #call the predict and explain function to make a prediction and talk about the breed
-        predict(image_file)
+        pred_dog_breed,confidence_score = predict(image_file)
+        get_pred_score(pred_dog_breed,confidence_score)
 
 if __name__ == '__main__':
   st.write('Select an image of the dog to predict its breed')
