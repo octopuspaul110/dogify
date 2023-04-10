@@ -84,8 +84,6 @@ def get_pred_score(pred_dog_breed,confidence_score):
           openai_learnmore_module(pred_dog_breed)
         except Exception as e:
           st.write(f'click the following link to learn about _{pred_dog_breed}_ [link](https://en.wikipedia.org/wiki/{pred_dog_breed})')
-        finally:
-           st.write(f'App Developer can be reached at [link](octopuspaul110@gmail.com)')
 
 def openai_learnmore_module(pred_dog_breed):
     prompt = f"Tell me everything you know about {pred_dog_breed} dog breed in 20 words"
