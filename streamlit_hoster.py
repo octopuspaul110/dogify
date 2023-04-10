@@ -80,7 +80,7 @@ def predict(image_file):
         
 
 def get_pred_score(pred_dog_breed,confidence_score):
-    if confidence_score > 34:
+    if confidence_score > 40:
       gen_pred_button = st.button("GET BREED")
       if gen_pred_button:
           st.title(f'Predicted breed for this dog is :blue[{pred_dog_breed}] :dog:')
