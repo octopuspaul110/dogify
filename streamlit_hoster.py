@@ -16,11 +16,14 @@ import os
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 #load the model
+@st.cache_resource
 def load_model(model_path):
   print(f'Loading model saved to {model_path}')
   model = tf.keras.models.load_model(model_path,custom_objects = {'KerasLayer':tfhub.KerasLayer})
   print(f'Successfully loaded model saved to {model_path}')
   return model
+
+@st.cache_data
 def get_unique_breeds(path):
     label_csv = pd.read_csv(path)
     labels = np.array(label_csv['breed'])
@@ -58,6 +61,8 @@ def get_time():
   return hour
 with st.sidebar.title('About App') as title:
   st.write(f'Hello there,Good {get_time()},this is a computer vision project that helps you get the breed and learn a few things about your dog,this project adopts the transfer learning approach in machine learning using the inceptionv3 model developed at google with 24 million Parameters,6 Billion FLOPs and trained on imagenet(more on imagenet on https://paperswithcode.com/dataset/imagenet ).\nyou can learn about the model by reading its paper on https://www.bing.com/ck/a?!&&p=883ef823742cb051JmltdHM9MTY4MDczOTIwMCZpZ3VpZD0xNzE3N2Y5NC1iOTk1LTZhNGMtMDgwNy02ZWFmYjhkODZiNDMmaW5zaWQ9NTM3Mg&ptn=3&hsh=3&fclid=17177f94-b995-6a4c-0807-6eafb8d86b43&psq=inceptionv3+paper&u=a1aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzE1MTIuMDA1NjcucGRm&ntb=1. Thanks...')
+
+@st.cache_data
 def predict(image_file):
     if image_file is not None:
         image = Image.open(image_file)
@@ -94,10 +99,12 @@ def openai_learnmore_module(pred_dog_breed):
         st.info("{chat_Response}")
     else:
         st.write("Sorry i can't tell you more,try again later")
+
 def mainer(image_file):
         st.image(image_file,caption='Your dog image',channels = 'RGB')
         #call the predict and explain function to make a prediction and talk about the breed
         predict(image_file)
+
 if __name__ == '__main__':
   st.write('Select an image of the dog to predict its breed')
   image_file = st.file_uploader("Image",type = ['jpg','jpeg','png'])
