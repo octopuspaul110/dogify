@@ -11,7 +11,7 @@ import openai
 import time
 import os
  
-
+st.set_page_config(page_title='Dog Vision App')
 #Authentication of openai api
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -35,7 +35,6 @@ model_path = "saved_model/20230330-12441680180287full-image-set-imagenetv3-Adam-
 model = load_model(model_path)
 labels_path = 'labels/labels.csv'
 dog_breeds = get_unique_breeds(labels_path)
-st.set_page_config(page_title='Dog Vision App')
 #flask_url = ngrok.connect(5000).public_url
 
 st.header('Welcome to the Dogify app')
