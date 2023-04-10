@@ -97,7 +97,8 @@ def get_pred_score(pred_dog_breed,confidence_score):
               pred_dog_breed = pred_dog_breed + '_' + pred_dog_breed
             elif pre_dog_breed == 'japanese_spaniel':
               pred_dog_breed = 'japanese-chin-history-japans-royal-spaniel'
-            st.write(f'click the following link to learn more about _{pred_dog_breed}_ [link](https://www.akc.org/dog-breeds/{pred_dog_breed.replace('_','-')})')
+            pred_dog_breed = pred_dog_breed.replace('_','-')
+            st.write(f'click the following link to learn more about _{pred_dog_breed}_ [link](https://www.akc.org/dog-breeds/{pred_dog_breed})')
     else:
             st.write(f'oh,seems like you uploaded the wrong or bad image,reload the app and upload a clear dog image.')
 
