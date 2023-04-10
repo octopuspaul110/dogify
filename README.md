@@ -1,5 +1,5 @@
 # Dogify
-[Streamlit app](https://octopuspaul110-dogify-streamlit-hoster-hvdr5b.streamlit.app/)
+[Streamlit app](https://octopuspaul110-dogify-streamlit-hoster-sqonhq.streamlit.app/)
 
 Welcome to the Dog Breed Classifier App!
 
