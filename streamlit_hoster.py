@@ -68,22 +68,30 @@ def predict(image_file):
         image = image.resize((224,224))
         img_array = np.array(image) / 255.0
         img_array = np.expand_dims(img_array,axis = 0)
-        prediction = model.predict(img_array)[0]
-        pred_dog_breed = dog_breeds[np.argmax(prediction)]
-        confidence_score = round(np.max(prediction) * 100)
-        #scorer = f"I'm {confidence_score}% sure your dog is a {pred_dog_breed}"
-        return pred_dog_breed,confidence_score
+        try:
+          prediction = model.predict(img_array)[0]
+          pred_dog_breed = dog_breeds[np.argmax(prediction)]
+          confidence_score = round(np.max(prediction) * 100)
+          #scorer = f"I'm {confidence_score}% sure your dog is a {pred_dog_breed}"
+          return pred_dog_breed,confidence_score
+        except Exception as e:
+           st.write('oops 😐,you uploaded a bad image,dont upload screenshots or a blurry image,upload a clear picture of your dog.')
+           os._exit()
+        
 
 def get_pred_score(pred_dog_breed,confidence_score):
-    gen_pred_button = st.button("GET BREED")
-    if gen_pred_button:
-        st.title(f'Predicted breed for this dog is :blue[{pred_dog_breed}] :dog:')
-        st.title(f'Confidence Score: {confidence_score}%')
-        #st.write(f'click the botton below to learn more about your dog')
-        try:
-          openai_learnmore_module(pred_dog_breed)
-        except Exception as e:
-          st.write(f'click the following link to learn about _{pred_dog_breed}_ [link](https://en.wikipedia.org/wiki/{pred_dog_breed})')
+    if not confidence_score < 35:
+      gen_pred_button = st.button("GET BREED")
+      if gen_pred_button:
+          st.title(f'Predicted breed for this dog is :blue[{pred_dog_breed}] :dog:')
+          st.title(f'Confidence Score: {confidence_score}%')
+          #st.write(f'click the botton below to learn more about your dog')
+          try:
+            openai_learnmore_module(pred_dog_breed)
+          except Exception as e:
+            st.write(f'click the following link to learn about _{pred_dog_breed}_ [link](https://en.wikipedia.org/wiki/{pred_dog_breed})')
+    else:
+            st.write(f'oh,seems like you uploaded the wrong or bad image,reload the app and upload a dog image')
 
 def openai_learnmore_module(pred_dog_breed):
     prompt = f"Tell me everything you know about {pred_dog_breed} dog breed in 20 words"
@@ -105,8 +113,11 @@ def openai_learnmore_module(pred_dog_breed):
 def mainer(image_file):
         st.image(image_file,caption='Your dog image',channels = 'RGB')
         #call the predict and explain function to make a prediction and talk about the breed
-        pred_dog_breed,confidence_score = predict(image_file)
-        get_pred_score(pred_dog_breed,confidence_score)
+        try:
+          pred_dog_breed,confidence_score = predict(image_file)
+          get_pred_score(pred_dog_breed,confidence_score)
+        except Exception as e:
+           st.write(f'Please reload the app to use it again')
 
 if __name__ == '__main__':
   st.write('Select an image of the dog to predict its breed')
