@@ -94,7 +94,7 @@ def get_pred_score(pred_dog_breed,confidence_score):
               pred_dog_breed = 'poodle'
             elif 'chow' in pred_dog_breed:
               pred_dog_breed = pred_dog_breed + '_' + pred_dog_breed
-            elif pre_dog_breed == 'japanese_spaniel':
+            elif pred_dog_breed == 'japanese_spaniel':
               pred_dog_breed = 'japanese-chin-history-japans-royal-spaniel'
             pred_dog_breed = pred_dog_breed.replace('_','-')
             response = requests.get(f'https://www.akc.org/dog-breeds/{pred_dog_breed}')
@@ -123,13 +123,13 @@ def openai_learnmore_module(pred_dog_breed):
         st.write("Sorry i can't tell you more,try again later")
 
 def mainer(image_file):
-        st.image(image_file,caption='Your dog image',channels = 'RGB')
-        #call the predict and explain function to make a prediction and talk about the breed
-        try:
-          pred_dog_breed,confidence_score = predict(image_file)
-          get_pred_score(pred_dog_breed,confidence_score)
-        except Exception as e:
-           st.write(f'Please reload the app to use it again')
+    st.image(image_file,caption='Your dog image',channels = 'RGB')
+    #call the predict and explain function to make a prediction and talk about the breed
+    try:
+      pred_dog_breed,confidence_score = predict(image_file)
+      get_pred_score(pred_dog_breed,confidence_score)
+    except Exception as e:
+      st.write(f'Please reload the app to use it again')
 
 if __name__ == '__main__':
   st.write('Select an image of the dog to predict its breed')
