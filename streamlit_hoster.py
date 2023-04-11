@@ -78,7 +78,6 @@ def predict(image_file):
            st.write('oops 😐,you uploaded a bad image,dont upload screenshots or a blurry image,upload a clear picture of your dog.')
            os._exit()
         
-
 def get_pred_score(pred_dog_breed,confidence_score):
     if confidence_score > 40:
       gen_pred_button = st.button("GET BREED")
@@ -98,7 +97,11 @@ def get_pred_score(pred_dog_breed,confidence_score):
             elif pre_dog_breed == 'japanese_spaniel':
               pred_dog_breed = 'japanese-chin-history-japans-royal-spaniel'
             pred_dog_breed = pred_dog_breed.replace('_','-')
-            st.write(f'click the following link to learn more about _{pred_dog_breed}_ [link](https://www.akc.org/dog-breeds/{pred_dog_breed})')
+            response = requests.get(f'https://www.akc.org/dog-breeds/{pred_dog_breed}')
+            if response.status_code == requests.codes.ok:
+              st.write(f'click the following link to learn more about _{pred_dog_breed}_ [link](https://www.akc.org/dog-breeds/{pred_dog_breed})')
+            else:
+              st.write(f'sorry,i cannot get any information about this dog breed right now,click this link to visit google [link](https://www.google.com/search?q={pred_dog_breed})')
     else:
             st.write(f'oh,seems like you uploaded the wrong or bad image,reload the app and upload a clear dog image.')
 
